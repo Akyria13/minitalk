@@ -6,7 +6,7 @@
 /*   By: jowagner <jowagner@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 13:54:00 by jolanwagner       #+#    #+#             */
-/*   Updated: 2025/05/27 14:47:52 by jowagner         ###   ########.fr       */
+/*   Updated: 2025/05/28 18:31:34 by jowagner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,10 @@ void	handle_signal(int signum, siginfo_t *info, void *context)
 	kill(info->si_pid, SIGUSR1);
 }
 
-int main(void)
+int	main(void)
 {
 	struct sigaction	sa;
-	pid_t 				pid;
+	pid_t				pid;
 
 	pid = getpid();
 	ft_printf("\n\033[1;93mServer PID :\033[0m %d\n", pid);
