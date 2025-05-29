@@ -6,7 +6,7 @@
 /*   By: jowagner <jowagner@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 13:54:23 by jolanwagner       #+#    #+#             */
-/*   Updated: 2025/05/28 18:11:20 by jowagner         ###   ########.fr       */
+/*   Updated: 2025/05/29 17:14:02 by jowagner         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	handle_signal(int signum)
 void	send_char(pid_t server_pid, char c)
 {
 	int	i;
+	int	try;
 
 	i = 7;
 	while (i >= 0)
@@ -29,8 +30,17 @@ void	send_char(pid_t server_pid, char c)
 			kill(server_pid, SIGUSR2);
 		else
 			kill(server_pid, SIGUSR1);
-		while (g_signal_received != 0)
-			pause();
+		try = 0;
+		while (g_signal_received != 0 && try < 100000)
+		{
+			usleep(1);
+			try++;
+		}
+		if (try >= 100000)
+		{
+			ft_printf("Error, server crash.\n");
+			exit(EXIT_FAILURE);
+		}
 		g_signal_received = 1;
 		i--;
 	}
@@ -55,11 +65,12 @@ int	main(int argc, char **argv)
 		return (ft_printf("Usage : %s <PID> <message>\n", argv[0]), 1);
 	server_pid = ft_atoi(argv[1]);
 	if (server_pid <= 0)
-		return (ft_printf("PID incorrect.\n"), 1);
+		return (ft_printf("PID error.\n"), 1);
 	sigemptyset(&sa.sa_mask);
 	sa.sa_handler = handle_signal;
-	sa.sa_flags = SA_SIGINFO;
+	sa.sa_flags = 0;
 	sigaction(SIGUSR1, &sa, NULL);
+	sigaction(SIGUSR2, &sa, NULL);
 	send_message(server_pid, argv[2]);
 	return (0);
 }

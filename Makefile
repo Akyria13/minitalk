@@ -49,7 +49,7 @@ all : 					.print_header lib $(NAME_C_S)
 lib :
 							$(MAKE) -C $(LIBFT_DIR)
 
-bonus :					.print_header_bonus lib $(NAME_C_S) $(NAME_C_S_BONUS)
+bonus :					.print_header_bonus lib $(NAME_C_S_BONUS)
 
 clean :					.print_header
 							@printf "%-50b%b" "$(YELLOW)[minitalk/$(OBJ_DIR)] :$(RESET)" "\n"
